@@ -18,10 +18,14 @@ def resolve_icon(name):
     bases = [
         "/usr/share/icons/hicolor",
         "/usr/share/icons/Adwaita",
+        "/usr/share/icons/breeze",
+        "/usr/share/icons/breeze-dark",
+        "/usr/share/icons/Papirus",
+        "/usr/share/icons/Tela",
         os.path.expanduser("~/.local/share/icons/hicolor"),
     ]
-    sizes = ["48x48", "64x64", "128x128", "scalable"]
-    subdirs = ["apps", "actions", "categories", "devices", "places"]
+    sizes = ["48x48", "64x64", "128x128", "256x256", "scalable", "symbolic"]
+    subdirs = ["apps", "actions", "categories", "devices", "places", "status", "emblems"]
 
     for base in bases:
         for size in sizes:

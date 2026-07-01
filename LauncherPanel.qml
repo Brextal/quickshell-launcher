@@ -91,7 +91,7 @@ PanelWindow {
 
                 delegate: AppItem {
                     appName: modelData ? modelData.name : ""
-                        appIcon: modelData ? (modelData.icon_path || modelData.icon) : ""
+                        appIcon: modelData ? modelData.icon_path : ""
                     isSelected: index === root.selectedIndex
                     distance: index - root.selectedIndex
                     listHeight: listContainer.height

@@ -2,7 +2,7 @@
 
 App launcher flotante con efecto vidrio esmerilado para Hyprland + Quickshell.
 
-<video src="demo/launcher.mp4" controls width="100%"></video>
+<video src="https://raw.githubusercontent.com/Brextal/quickshell-launcher/main/demo/launcher.mp4" controls width="100%"></video>
 
 ## Características
 

@@ -24,7 +24,7 @@ def resolve_icon(name):
         "/usr/share/icons/Tela",
         os.path.expanduser("~/.local/share/icons/hicolor"),
     ]
-    sizes = ["48x48", "64x64", "128x128", "256x256", "scalable", "symbolic"]
+    sizes = ["48x48", "64x64", "128x128", "256x256", "512x512", "scalable", "symbolic"]
     subdirs = ["apps", "actions", "categories", "devices", "places", "status", "emblems"]
 
     for base in bases:
@@ -71,9 +71,16 @@ def parse_desktop_files():
                 continue
 
             entries = {}
+            in_entry = False
             for line in content.split('\n'):
                 line = line.strip()
-                if not line or line.startswith('#') or line.startswith('['):
+                if line.startswith('[Desktop Entry]'):
+                    in_entry = True
+                    continue
+                if line.startswith('['):
+                    in_entry = False
+                    continue
+                if not in_entry or not line or line.startswith('#'):
                     continue
                 if '=' in line:
                     k, v = line.split('=', 1)
@@ -95,6 +102,11 @@ def parse_desktop_files():
             seen.add(name)
 
             exec_cmd = re.sub(r'%[fFuUdDnNickvm]', '', exec_cmd).strip()
+            # Remove orphaned -- and flags left after field code removal
+            # e.g. "command --url -- %u" -> "command --url --" -> "command"
+            exec_cmd = re.sub(r'\s+--\s*$', '', exec_cmd)
+            exec_cmd = re.sub(r'\s+-{1,2}[a-zA-Z-]+(?:\s+--)?\s*$', '', exec_cmd)
+            exec_cmd = exec_cmd.strip()
             exec_cmd = re.sub(r'^"|"$', '', exec_cmd)
 
             apps.append({'name': name, 'icon': icon, 'exec': exec_cmd, 'icon_path': resolve_icon(icon)})

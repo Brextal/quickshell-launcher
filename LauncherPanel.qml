@@ -52,19 +52,19 @@ PanelWindow {
 
                 onTextChanged: root.filter(text)
 
-                Keys.onUpPressed: {
+                Keys.onUpPressed: function(event) {
                     event.accepted = true
                     root.moveUp()
                 }
-                Keys.onDownPressed: {
+                Keys.onDownPressed: function(event) {
                     event.accepted = true
                     root.moveDown()
                 }
-                Keys.onReturnPressed: {
+                Keys.onReturnPressed: function(event) {
                     event.accepted = true
                     root.launchSelected()
                 }
-                Keys.onEscapePressed: {
+                Keys.onEscapePressed: function(event) {
                     event.accepted = true
                     root.close()
                 }
@@ -133,8 +133,8 @@ PanelWindow {
     function launchSelected() {
         if (filteredApps.length > 0 && selectedIndex >= 0 && selectedIndex < filteredApps.length) {
             var app = filteredApps[selectedIndex]
-            launchProcess.command = ["/bin/sh", "-c", app.exec + " &"]
-            launchProcess.running = true
+            launchProcess.command = ["/bin/sh", "-c", app.exec]
+            launchProcess.startDetached()
             close()
         }
     }

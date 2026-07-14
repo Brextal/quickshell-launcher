@@ -3,6 +3,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
 import Quickshell.Io
+import "./shared" as Pywal
 
 PanelWindow {
     id: root
@@ -14,6 +15,7 @@ PanelWindow {
     focusable: true
     color: "transparent"
     visible: false
+    property var pywal: Pywal.Pywal { id: pywalColors }
 
     property var allApps: []
     property var filteredApps: []
@@ -39,13 +41,13 @@ PanelWindow {
                     height: 36
                     placeholderText: "Buscar aplicación..."
                     placeholderTextColor: "#666666"
-                    color: "#ffffff"
+                    color: pywalColors.foreground
                     font.pixelSize: 14
                     font.family: "sans-serif"
                 background: Rectangle {
-                    color: "#22ffffff"
+                    color: "#401e1e2e"
                     radius: 12
-                    border.color: "#30ffffff"
+                    border.color: "#601e1e2e"
                     border.width: 1
                 }
                 leftPadding: 16
@@ -74,7 +76,7 @@ PanelWindow {
         Rectangle {
             width: parent.width - 32
             height: 1
-            color: "#333344"
+            color: "#30ffffff"
             anchors.horizontalCenter: parent.horizontalCenter
         }
 
@@ -83,6 +85,17 @@ PanelWindow {
             width: parent.width
                 height: parent.height - 56
             clip: true
+
+            MouseArea {
+                anchors.fill: parent
+                onWheel: function(event) {
+                    if (event.angleDelta.y > 0)
+                        root.moveUp()
+                    else if (event.angleDelta.y < 0)
+                        root.moveDown()
+                    event.accepted = true
+                }
+            }
 
             Repeater {
                 id: appRepeater
@@ -95,6 +108,7 @@ PanelWindow {
                     isSelected: index === root.selectedIndex
                     distance: index - root.selectedIndex
                     listHeight: listContainer.height
+                    onClicked: root.selectedIndex = index
                 }
             }
         }

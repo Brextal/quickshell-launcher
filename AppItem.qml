@@ -1,5 +1,6 @@
 import QtQuick
 import QtQuick.Controls
+import "./shared" as Pywal
 
 Item {
     id: root
@@ -9,6 +10,9 @@ Item {
     property bool isSelected: false
     property int distance: 0
     property real listHeight: 0
+    property var pywal: Pywal.Pywal { id: pywalColors }
+
+    signal clicked()
 
     readonly property real absDist: Math.abs(distance)
     readonly property bool isVisible: absDist <= 3
@@ -38,7 +42,7 @@ Item {
     Rectangle {
         anchors.fill: parent
         radius: 12
-        color: isSelected ? "#3dd1b033" : "#18ffffff"
+        color: isSelected ? "#701e1e2e" : "#301e1e2e"
     }
 
     Row {
@@ -51,12 +55,9 @@ Item {
         }
         spacing: 16
 
-        Rectangle {
-            id: iconCircle
+        Item {
             width: 40
             height: 40
-            radius: 20
-            color: isSelected ? "#3dd1b0" : "#22ffffff"
 
             Image {
                 id: iconImg
@@ -74,7 +75,7 @@ Item {
             Text {
                 anchors.centerIn: parent
                 text: appName.length > 0 ? appName.charAt(0).toUpperCase() : "?"
-                color: isSelected ? "#1a1b26" : "#aaaaaa"
+                color: isSelected ? pywalColors.foreground : Qt.alpha(pywalColors.color4, 0.5)
                 font.pixelSize: 17
                 font.bold: true
                 visible: iconImg.status !== Image.Ready
@@ -87,13 +88,18 @@ Item {
 
             Text {
                 text: appName
-                color: isSelected ? "#ffffff" : "#aaaaaa"
+                color: isSelected ? pywalColors.foreground : Qt.alpha(pywalColors.color4, 0.5)
                 font.pixelSize: isSelected ? 16 : 13
                 font.bold: isSelected
                 elide: Text.ElideRight
                 width: root.width - 80
             }
         }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: root.clicked()
     }
 
     Behavior on x { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
